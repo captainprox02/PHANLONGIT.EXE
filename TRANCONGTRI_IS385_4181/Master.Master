@@ -1,0 +1,33 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Master.master.cs" Inherits="TRANCONGTRI_IS385_4181.Master" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+	<title></title>
+	<link href="/styles.css" rel="stylesheet" />
+	<asp:ContentPlaceHolder ID="head" runat="server">
+	</asp:ContentPlaceHolder>
+</head>
+<body>
+	<form id="form1" runat="server">
+		<div class="page">
+			<div class="left">
+				<asp:DataList ID="loaihang" runat="server">
+					<ItemTemplate>
+						<asp:Label ID="Label1" runat="server" Text='<%# Eval("TenLoai") %>'></asp:Label>
+					</ItemTemplate>
+				</asp:DataList>
+			</div>
+			<div class="content">
+				<asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+				</asp:ContentPlaceHolder>
+			</div>
+
+			<div class="right">
+				<asp:Login ID="Login1" runat="server"></asp:Login>
+			</div>
+		</div>
+	</form>
+</body>
+</html>
