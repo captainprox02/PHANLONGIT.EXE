@@ -1,0 +1,141 @@
+Master
+------------------------------------------
+
+<link href="/styles.css" rel="stylesheet" />
+
+
+		<div class="page">
+			<div class="left">
+				<asp:DataList ID="loaihang" runat="server">
+					<ItemTemplate>
+						<asp:Label ID="Label1" runat="server" Text='<%# Eval("TenLoai") %>'></asp:Label>
+					</ItemTemplate>
+				</asp:DataList>
+			</div>
+			<div class="content">
+				<asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+				</asp:ContentPlaceHolder>
+			</div>
+
+			<div class="right">
+				<asp:Login ID="Login1" runat="server"></asp:Login>
+			</div>
+		</div>
+
+---------------------------------------------
+Master.cs
+
+XuLy KN = new XuLy();
+
+		protected void Page_Load(object sender, EventArgs e)
+		{
+			try
+			{
+				string query = "select * from LOAISACH";
+				
+				this.loaihang.DataSource = KN.GetData(query);
+				this.loaihang.DataBind();
+			}
+			catch (SqlException ex)
+			{
+
+				Response.Write(ex.Message);
+			}
+		}
+
+-------------------------------------------
+
+Xuly.cs
+
+
+using System.Data;
+using System.Data.SqlClient;
+
+
+
+public class XuLy : System.Web.UI.Page
+	{
+		SqlConnection connect;
+		public void Connect()
+		{
+			string path = Page.Server.MapPath("App_Data");
+			path += "\\Database.mdf";
+			connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + path + ";Integrated Security=True");
+			connect.Open();
+		}
+
+		public void Close()
+		{
+			if (connect.State == ConnectionState.Open)
+			{
+				connect.Close();
+			}
+		}
+
+		public DataTable GetData(string q)
+		{
+			DataTable dt = new DataTable();
+			try
+			{
+				Connect();
+				SqlDataAdapter adap = new SqlDataAdapter(q, connect);
+				adap.Fill(dt);
+			}
+			catch
+			{
+				dt = null;
+			}
+			finally
+			{
+				Close();
+			}
+			return dt;
+		}
+	}
+
+-----------------------------------
+styles.css
+
+body {
+	margin: 0;
+	padding: 0;
+}
+
+.page {
+	width: 100%;
+	min-height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
+}
+
+.right {
+	width: auto;
+	height: 100%;
+	background-color: #f1f1f1;
+	min-height: 100vh;
+}
+
+.content {
+	flex: 1;
+	height: 100%;
+	background-color: #dadeff;
+	min-height: 100vh;
+}
+
+.left {
+	width: 200px;
+	min-height: 100vh;
+	height: 100%;
+	background-color: #f1f1f1;
+}
+
+--------------------------------------
+config
+
+  <appSettings>
+    <add key="ValidationSettings:UnobtrusiveValidationMode" value="None" />
+  </appSettings>
+
+
